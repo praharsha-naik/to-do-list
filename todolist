@@ -1,0 +1,68 @@
+tasks = []
+
+def show_tasks():
+    if not tasks:
+        print("\nYour to-do list is empty.")
+        return
+
+    print("\nYOUR TASKS")
+    for number, task in enumerate(tasks, start=1):
+        status = "✓" if task["done"] else " "
+        print(f"{number}. [{status}] {task['title']}")
+
+def get_task_number(action):
+    if not tasks:
+        print("There are no tasks yet.")
+        return None
+
+    show_tasks()
+
+    try:
+        number = int(input(f"Enter the task number to {action}: "))
+        if 1 <= number <= len(tasks):
+            return number - 1
+        print("That number is not in the list.")
+    except ValueError:
+        print("Please enter a number.")
+
+    return None
+
+while True:
+    print("\n===== TO-DO LIST =====")
+    print("1. View tasks")
+    print("2. Add a task")
+    print("3. Mark a task complete")
+    print("4. Delete a task")
+    print("5. Quit")
+
+    choice = input("Choose an option (1-5): ").strip()
+
+    if choice == "1":
+        show_tasks()
+
+    elif choice == "2":
+        title = input("Enter a task: ").strip()
+        if title:
+            tasks.append({"title": title, "done": False})
+            print("Task added.")
+        else:
+            print("Task cannot be empty.")
+
+    elif choice == "3":
+        index = get_task_number("mark complete")
+        if index is not None:
+            tasks[index]["done"] = True
+            print("Task marked complete.")
+
+    elif choice == "4":
+        index = get_task_number("delete")
+        if index is not None:
+            removed = tasks.pop(index)
+            print(f"Deleted: {removed['title']}")
+
+    elif choice == "5":
+        print("Goodbye!")
+        break
+
+    else:
+        print("Choose a number from 1 to 5.")
